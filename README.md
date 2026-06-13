@@ -1,10 +1,11 @@
 # AI-Claim Audit for Robust Vision (MILS 作業)
 
-本專案旨在執行 **AI-Claim Audit**，透過實驗證據審核 AI 對模型穩健性（Robustness）的預測與解釋。我們針對 `VGG-19` 與 `ViT-B/16` 兩個模型，在 `ImageNet-R` (Rendition) 資料集上進行風格偏移（Style Shift）的穩健性分析。
+本專案旨在執行 **AI-Claim Audit**，透過實驗證據審核 AI 對模型穩健性（Robustness）的預測與解釋。我們針對 `ResNeXt-101` (大型架構) 與 `MobileNet-V3 Large` (輕量架構) 兩個模型，在 `ImageNet-R` (Rendition) 資料集上進行風格偏移（Style Shift）的穩健性分析。
 
 ## 核心任務
 - **資料集**: 使用 `ImageNet-V2` 作為基準（Clean），`ImageNet-R` 作為偏移資料（Shifted）。
-- **模型比較**: `VGG-19` (CNN 架構) vs. `ViT-B/16` (Transformer 架構)。
+- **模型比較**: `ResNeXt-101` (Heavy) vs. `MobileNet-V3` (Lightweight)。
+- **預訓練權重**: 使用官方 `IMAGENET1K_V2` 版本。
 - **主要指標**: Accuracy Drop, Wrong Confidence, Failure Overlap。
 - **AI 審核**: 驗證 5 個關於模型穩健性的 AI 假說。
 

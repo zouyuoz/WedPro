@@ -10,27 +10,19 @@ def analyze():
     with open('results/metrics.json', 'r') as f:
         metrics = json.load(f)
 
-    vgg = metrics['VGG-19']
-    vit = metrics['ViT']
+    resnext = metrics['ResNeXt-101']
+    mobilenet = metrics['MobileNet-V3']
 
     # 1. Accuracy Drop
-    vgg_drop = vgg['acc_clean'] - vgg['acc_shift']
-    vit_drop = vit['acc_clean'] - vit['acc_shift']
+    resnext_drop = resnext['acc_clean'] - resnext['acc_shift']
+    mobilenet_drop = mobilenet['acc_clean'] - mobilenet['acc_shift']
 
-    # 2. Wrong Confidence
-    vgg_wrong_conf = [r['confidence'] for r in vgg['results_shift'] if not r['is_correct']]
-    vit_wrong_conf = [r['confidence'] for r in vit['results_shift'] if not r['is_correct']]
-    avg_vgg_wrong_conf = sum(vgg_wrong_conf) / len(vgg_wrong_conf) if vgg_wrong_conf else 0
-    avg_vit_wrong_conf = sum(vit_wrong_conf) / len(vit_wrong_conf) if vit_wrong_conf else 0
+    # 2. Relative Drop
+    resnext_rel_drop = resnext_drop / resnext['acc_clean'] if resnext['acc_clean'] > 0 else 0
+    mobilenet_rel_drop = mobilenet_drop / mobilenet['acc_clean'] if mobilenet['acc_clean'] > 0 else 0
 
-    # 3. Failure Overlap
-    vgg_fails = [not r['is_correct'] for r in vgg['results_shift']]
-    vit_fails = [not r['is_correct'] for r in vit['results_shift']]
-    both_fail = sum([1 for f1, f2 in zip(vgg_fails, vit_fails) if f1 and f2])
-    either_fail = sum([1 for f1, f2 in zip(vgg_fails, vit_fails) if f1 or f2])
-    overlap_ratio = both_fail / either_fail if either_fail > 0 else 0
-
-    # 4. Style-Specific Analysis (Fix for C2, C4)
+    # 3. Average Robust Accuracy (over styles)
+    # 4. Worst-condition Accuracy (min over styles)
     def get_style_acc(results):
         styles = {}
         for r in results:
@@ -39,44 +31,74 @@ def analyze():
             styles[s]['total'] += 1
             if r['is_correct']: styles[s]['correct'] += 1
         
-        return {s: (v['correct']/v['total']) for s, v in styles.items()}
+        return {s: (v['correct']/v['total']) for s, v in styles.items() if v['total'] > 0}
 
-    vgg_styles = get_style_acc(vgg['results_shift'])
-    vit_styles = get_style_acc(vit['results_shift'])
+    resnext_styles = get_style_acc(resnext['results_shift'])
+    mobilenet_styles = get_style_acc(mobilenet['results_shift'])
     
-    # Heuristic for Clean Baseline per style (using global clean acc as proxy since clean has no styles)
-    vgg_style_drops = {s: (vgg['acc_clean'] - acc) for s, acc in vgg_styles.items()}
-    vit_style_drops = {s: (vit['acc_clean'] - acc) for s, acc in vit_styles.items()}
+    resnext_avg_robust = sum(resnext_styles.values()) / len(resnext_styles) if resnext_styles else 0
+    mobilenet_avg_robust = sum(mobilenet_styles.values()) / len(mobilenet_styles) if mobilenet_styles else 0
+    
+    resnext_worst_acc = min(resnext_styles.values()) if resnext_styles else 0
+    mobilenet_worst_acc = min(mobilenet_styles.values()) if mobilenet_styles else 0
+
+    # 5. Wrong Confidence
+    resnext_wrong_conf = [r['confidence'] for r in resnext['results_shift'] if not r['is_correct']]
+    mobilenet_wrong_conf = [r['confidence'] for r in mobilenet['results_shift'] if not r['is_correct']]
+    avg_resnext_wrong_conf = sum(resnext_wrong_conf) / len(resnext_wrong_conf) if resnext_wrong_conf else 0
+    avg_mobilenet_wrong_conf = sum(mobilenet_wrong_conf) / len(mobilenet_wrong_conf) if mobilenet_wrong_conf else 0
+
+    # 6. Failure Overlap
+    resnext_fails = [not r['is_correct'] for r in resnext['results_shift']]
+    mobilenet_fails = [not r['is_correct'] for r in mobilenet['results_shift']]
+    both_fail = sum([1 for f1, f2 in zip(resnext_fails, mobilenet_fails) if f1 and f2])
+    either_fail = sum([1 for f1, f2 in zip(resnext_fails, mobilenet_fails) if f1 or f2])
+    overlap_ratio = both_fail / either_fail if either_fail > 0 else 0
+
+    # 7. Rejection Robustness (Accuracy at 80% coverage - rejecting 20% least confident)
+    def calc_rejection_acc(results, coverage=0.8):
+        sorted_results = sorted(results, key=lambda x: x['confidence'], reverse=True)
+        keep_count = int(len(sorted_results) * coverage)
+        top_results = sorted_results[:keep_count]
+        correct = sum([1 for r in top_results if r['is_correct']])
+        return correct / keep_count if keep_count > 0 else 0
+
+    resnext_rej_robust = calc_rejection_acc(resnext['results_shift'])
+    mobilenet_rej_robust = calc_rejection_acc(mobilenet['results_shift'])
+
+    # Style-Specific Analysis (Fix for C2, C4)
+    resnext_style_drops = {s: (resnext['acc_clean'] - acc) for s, acc in resnext_styles.items()}
+    mobilenet_style_drops = {s: (mobilenet['acc_clean'] - acc) for s, acc in mobilenet_styles.items()}
 
     # Audit Decisions
-    # C2: VGG-19's Accuracy Drop is largest on 'cartoons' and 'sketches'
-    vgg_max_drop_style = max(vgg_style_drops, key=vgg_style_drops.get)
-    c2_evidence = f"Max VGG Drop on {vgg_max_drop_style} ({vgg_style_drops.get(vgg_max_drop_style, 0):.4f}). "
-    c2_decision = "Supported" if vgg_max_drop_style in ['cartoons', 'sketches'] else "Refuted"
+    # C2: ResNeXt-101's Accuracy Drop is largest on 'cartoons' and 'sketches'
+    resnext_max_drop_style = max(resnext_style_drops, key=resnext_style_drops.get)
+    c2_evidence = f"Max ResNeXt Drop on {resnext_max_drop_style} ({resnext_style_drops.get(resnext_max_drop_style, 0):.4f}). "
+    c2_decision = "Supported" if resnext_max_drop_style in ['cartoons', 'sketches'] else "Refuted"
 
     # C4: Both models have their highest Accuracy Drop on 'sculptures'
-    vit_max_drop_style = max(vit_style_drops, key=vit_style_drops.get)
-    c4_evidence = f"VGG Max: {vgg_max_drop_style}, ViT Max: {vit_max_drop_style}"
-    c4_decision = "Supported" if (vgg_max_drop_style == 'sculptures' and vit_max_drop_style == 'sculptures') else "Refuted"
+    mobilenet_max_drop_style = max(mobilenet_style_drops, key=mobilenet_style_drops.get)
+    c4_evidence = f"ResNeXt Max: {resnext_max_drop_style}, MobileNet Max: {mobilenet_max_drop_style}"
+    c4_decision = "Supported" if (resnext_max_drop_style == 'sculptures' and mobilenet_max_drop_style == 'sculptures') else "Refuted"
 
     claims = [
         {
             "ID": "C1",
-            "Claim": "ViT has a smaller average Accuracy Drop on ImageNet-R than VGG-19.",
-            "Evidence": f"VGG Drop: {vgg_drop:.4f}, ViT Drop: {vit_drop:.4f}",
-            "Decision": "Supported" if vit_drop < vgg_drop else "Refuted"
+            "Claim": "ResNeXt-101 has a smaller average Accuracy Drop on ImageNet-R than MobileNet-V3.",
+            "Evidence": f"ResNeXt Drop: {resnext_drop:.4f}, MobileNet Drop: {mobilenet_drop:.4f}",
+            "Decision": "Supported" if resnext_drop < mobilenet_drop else "Refuted"
         },
         {
             "ID": "C2",
-            "Claim": "VGG-19's Accuracy Drop is largest on 'cartoon' and 'sketch' sub-categories.",
+            "Claim": "ResNeXt-101's Accuracy Drop is largest on 'cartoon' and 'sketch' sub-categories.",
             "Evidence": c2_evidence,
             "Decision": c2_decision
         },
         {
             "ID": "C3",
-            "Claim": "Wrong Confidence is higher for VGG-19 than ViT.",
-            "Evidence": f"VGG Wrong Conf: {avg_vgg_wrong_conf:.4f}, ViT Wrong Conf: {avg_vit_wrong_conf:.4f}",
-            "Decision": "Supported" if avg_vgg_wrong_conf > avg_vit_wrong_conf else "Refuted"
+            "Claim": "Wrong Confidence is higher for MobileNet-V3 than ResNeXt-101.",
+            "Evidence": f"ResNeXt Wrong Conf: {avg_resnext_wrong_conf:.4f}, MobileNet Wrong Conf: {avg_mobilenet_wrong_conf:.4f}",
+            "Decision": "Supported" if avg_mobilenet_wrong_conf > avg_resnext_wrong_conf else "Refuted"
         },
         {
             "ID": "C4",
@@ -86,7 +108,7 @@ def analyze():
         },
         {
             "ID": "C5",
-            "Claim": "The failure overlap between ViT and VGG-19 is less than 50%.",
+            "Claim": "The failure overlap between ResNeXt-101 and MobileNet-V3 is less than 50%.",
             "Evidence": f"Overlap Ratio: {overlap_ratio:.2%}",
             "Decision": "Supported" if overlap_ratio < 0.5 else "Refuted"
         }
@@ -100,8 +122,8 @@ def analyze():
     # Final Summary Table
     summary = {
         "Metric": ["Clean Accuracy", "Shifted Accuracy", "Accuracy Drop", "Avg Wrong Confidence", "Max Drop Style"],
-        "VGG-19": [vgg['acc_clean'], vgg['acc_shift'], vgg_drop, avg_vgg_wrong_conf, vgg_max_drop_style],
-        "ViT": [vit['acc_clean'], vit['acc_shift'], vit_drop, avg_vit_wrong_conf, vit_max_drop_style]
+        "ResNeXt-101": [resnext['acc_clean'], resnext['acc_shift'], resnext_drop, avg_resnext_wrong_conf, resnext_max_drop_style],
+        "MobileNet-V3": [mobilenet['acc_clean'], mobilenet['acc_shift'], mobilenet_drop, avg_mobilenet_wrong_conf, mobilenet_max_drop_style]
     }
     df_summary = pd.DataFrame(summary)
     print("\n--- Summary Results ---")
