@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.pyc
+results/metrics.json
+# metadata/
+.DS_Store
+*.env
+HF_TOKEN.env
+HF_TOKEN.env

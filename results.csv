@@ -1,0 +1,6 @@
+ID,Claim,Evidence,Decision
+C1,ViT has a smaller average Accuracy Drop on ImageNet-R than VGG-19.,"VGG Drop: 0.5850, ViT Drop: 0.5550",Supported
+C2,VGG-19's Accuracy Drop is largest on 'cartoon' and 'sketch' sub-categories.,Max VGG Drop on plush object (0.7550). ,Refuted
+C3,Wrong Confidence is higher for VGG-19 than ViT.,"VGG Wrong Conf: 0.3443, ViT Wrong Conf: 0.3625",Refuted
+C4,Both models have their highest Accuracy Drop on 'sculpture' renditions.,"VGG Max: plush object, ViT Max: plush object",Refuted
+C5,The failure overlap between ViT and VGG-19 is less than 50%.,Overlap Ratio: 80.17%,Refuted
