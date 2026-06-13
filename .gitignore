@@ -7,3 +7,4 @@ results/metrics.json
 *.env
 HF_TOKEN.env
 HF_TOKEN.env
+failure_cases/

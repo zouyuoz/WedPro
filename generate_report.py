@@ -54,7 +54,7 @@ def generate_report():
             .audit-refuted {{ color: #c0392b; font-weight: bold; }}
             .audit-unclear {{ color: #f39c12; font-weight: bold; }}
             .image-container {{ display: flex; flex-wrap: wrap; justify-content: space-around; }}
-            .image-box {{ width: 45%; margin-bottom: 20px; text-align: center; border: 1px solid #eee; padding: 10px; }}
+            .image-box {{ width: 22%; margin-bottom: 20px; text-align: center; border: 1px solid #eee; padding: 10px; }}
             .image-box img {{ max-width: 100%; height: auto; border-radius: 3px; }}
             .caption {{ font-size: 0.9em; color: #666; margin-top: 5px; }}
         </style>

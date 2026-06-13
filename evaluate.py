@@ -66,10 +66,9 @@ def evaluate_model(model, dataset, preprocess, num_samples, desc, model_name, sp
             if is_correct:
                 correct += 1
             else:
-                if failure_count < 10:
-                    img_path = f"failure_cases/{model_name}_{split_name}_fail_{failure_count}.png"
-                    img_rgb.save(img_path)
-                    failure_count += 1
+                img_path = f"failure_cases/{model_name[:3]}_{split_name}_{failure_count}.png"
+                img_rgb.save(img_path)
+                failure_count += 1
             
             total += 1
             confidences.append(conf.item())
@@ -81,7 +80,7 @@ def evaluate_model(model, dataset, preprocess, num_samples, desc, model_name, sp
                 'target': target,
                 'wnid': wnid,
                 'style': style,
-                'is_failure_saved': (not is_correct and failure_count <= 10)
+                'is_failure_saved': (-1 if not is_correct else failure_count-1)
             })
             
             pbar.update(1)
