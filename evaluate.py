@@ -14,10 +14,10 @@ from transformers import CLIPProcessor, CLIPModel
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")
 
-def load_style_model():
+def load_style_model(hf_token=None):
     print("Loading Style Classifier (CLIP)...")
-    model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32").to(device)
-    processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
+    model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32", token=hf_token).to(device)
+    processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32", token=hf_token)
     return model, processor
 
 def get_style(model, processor, image, style_list):
@@ -128,13 +128,6 @@ def main():
     with open('metadata/renditions.json', 'r') as f:
         style_list = json.load(f)
     
-    wnid_to_idx = get_imagenet_mappings()
-    selected_indices = set([wnid_to_idx[wnid] for wnid in selected_wnids])
-    idx_to_wnid = {idx: wnid for wnid, idx in wnid_to_idx.items()}
-    
-    vgg19, vit, preprocess = load_models()
-    style_model, style_processor = load_style_model()
-    
     # Load HF Token if exists
     hf_token = None
     if os.path.exists('HF_TOKEN.env'):
@@ -144,6 +137,14 @@ def main():
                 hf_token = line.split('=')[1]
             else:
                 hf_token = line
+        print("Found HF_TOKEN = ", hf_token)
+    
+    wnid_to_idx = get_imagenet_mappings()
+    selected_indices = set([wnid_to_idx[wnid] for wnid in selected_wnids])
+    idx_to_wnid = {idx: wnid for wnid, idx in wnid_to_idx.items()}
+    
+    vgg19, vit, preprocess = load_models()
+    style_model, style_processor = load_style_model(hf_token=hf_token)
 
     # 1. Prepare Datasets
     print("Preparing Clean Dataset (ImageNet-V2)...")

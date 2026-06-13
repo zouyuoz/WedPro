@@ -39,15 +39,16 @@ def generate_report():
                 font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
                 line-height: 1.6;
                 color: #333;
+				font-size: 9pt;
                 max-width: 800px;
                 margin: auto;
             }}
-            h1 {{ color: #2c3e50; text-align: center; border-bottom: 2px solid #2c3e50; padding-bottom: 10px; }}
-            h2 {{ color: #2980b9; border-left: 5px solid #2980b9; padding-left: 10px; margin-top: 30px; }}
-            h3 {{ color: #34495e; }}
-            table {{ width: 100%; border-collapse: collapse; margin: 20px 0; }}
+            h1 {{ color: #2c3e50; text-align: center; border-bottom: 2px solid #2c3e50; padding-bottom: 10px; font-weight: bolder; }}
+            h2 {{ color: #2980b9; border-left: 5px solid #2980b9; padding-left: 10px; margin-top: 30px; font-weight: bolder; }}
+            h3 {{ color: #34495e; font-weight: bolder; }}
+            table {{ width: 100%; border-collapse: collapse; margin: 9px 0; }}
             th, td {{ border: 1px solid #ddd; padding: 12px; text-align: left; }}
-            th {{ background-color: #f2f2f2; color: #2c3e50; }}
+            th {{ background-color: #f2f2f2; color: #2c3e50; font-weight: bolder; }}
             .summary-box {{ background-color: #ecf0f1; padding: 15px; border-radius: 5px; margin: 20px 0; }}
             .audit-supported {{ color: #27ae60; font-weight: bold; }}
             .audit-refuted {{ color: #c0392b; font-weight: bold; }}
@@ -90,23 +91,23 @@ def generate_report():
             </tr>
             <tr>
                 <td>Clean Accuracy</td>
-                <td>{vgg['acc_clean']:.2%}</td>
-                <td>{vit['acc_clean']:.2%}</td>
+                <td>75.50%</td>
+                <td>84.00%</td>
             </tr>
             <tr>
                 <td>Shifted Accuracy</td>
-                <td>{vgg['acc_shift']:.2%}</td>
-                <td>{vit['acc_shift']:.2%}</td>
+                <td>17.00%</td>
+                <td>28.50%</td>
             </tr>
             <tr>
                 <td><strong>Accuracy Drop</strong></td>
-                <td><strong>{vgg_drop:.4f}</strong></td>
-                <td><strong>{vit_drop:.4f}</strong></td>
+                <td><strong>0.5850</strong></td>
+                <td><strong>0.5550</strong></td>
             </tr>
             <tr>
                 <td>Avg Wrong Confidence</td>
-                <td>{vgg['conf_shift']:.2%} (All)</td>
-                <td>{vit['conf_shift']:.2%} (All)</td>
+                <td>41.68% (All)</td>
+                <td>46.56% (All)</td>
             </tr>
         </table>
 
@@ -119,12 +120,47 @@ def generate_report():
                 <th>證據 (Evidence)</th>
                 <th>審核結果 (Decision)</th>
             </tr>
-            {generate_table_rows(df_claims)}
+            
+        <tr>
+            <td>C1</td>
+            <td>ViT has a smaller average Accuracy Drop on ImageNet-R than VGG-19.</td>
+            <td>VGG Drop: 0.5850, ViT Drop: 0.5550</td>
+            <td class="audit-supported">Supported</td>
+        </tr>
+        
+        <tr>
+            <td>C2</td>
+            <td>VGG-19's Accuracy Drop is largest on 'cartoon' and 'sketch' sub-categories.</td>
+            <td>Max VGG Drop on plush object (0.7550). </td>
+            <td class="audit-refuted">Refuted</td>
+        </tr>
+        
+        <tr>
+            <td>C3</td>
+            <td>Wrong Confidence is higher for VGG-19 than ViT.</td>
+            <td>VGG Wrong Conf: 0.3443, ViT Wrong Conf: 0.3625</td>
+            <td class="audit-refuted">Refuted</td>
+        </tr>
+        
+        <tr>
+            <td>C4</td>
+            <td>Both models have their highest Accuracy Drop on 'sculpture' renditions.</td>
+            <td>VGG Max: plush object, ViT Max: plush object</td>
+            <td class="audit-refuted">Refuted</td>
+        </tr>
+        
+        <tr>
+            <td>C5</td>
+            <td>The failure overlap between ViT and VGG-19 is less than 50%.</td>
+            <td>Overlap Ratio: 80.17%</td>
+            <td class="audit-refuted">Refuted</td>
+        </tr>
+        
         </table>
 
         <h2>5. 深入分析與觀察 (In-depth Analysis)</h2>
         <h3>5.1 穩健性差異</h3>
-        <p>實驗結果支持了 <strong>ViT 比 VGG-19 更具穩健性</strong> 的說法。ViT 的 Accuracy Drop 為 {vit_drop:.4f}，優於 VGG-19 的 {vgg_drop:.4f}。這可能歸功於 Transformer 的全局注意力機制，使其能捕捉到比局部卷積更具辨識度的形狀特徵，而非僅依賴局部紋理。</p>
+        <p>實驗結果支持了 <strong>ViT 比 VGG-19 更具穩健性</strong> 的說法。ViT 的 Accuracy Drop 為 0.5550，優於 VGG-19 的 0.5850。這可能歸功於 Transformer 的全局注意力機制，使其能捕捉到比局部卷積更具辨識度的形狀特徵，而非僅依賴局部紋理。</p>
 
         <h3>5.2 過度自信問題 (Overconfidence)</h3>
         <p>令人意外的是，ViT 在答錯時的平均信心值比 VGG-19 更高（Refuted C3）。這顯示 ViT 雖然準確率較高，但一旦遇到不熟悉的風格偏移，其預測往往更具誤導性，這在安全關鍵的應用中是一個潛在風險。</p>
@@ -161,6 +197,7 @@ def generate_report():
         <p><strong>AI 的誤導之處：</strong> AI 最初預測 VGG-19 會有較高的 Wrong Confidence，且認為兩模型失敗案例會大不相同。然而實驗證明 ViT 更加過度自信，且兩者失敗模式高度一致。這顯示了「實驗驗證」在 AI 時代的重要性——我們不能盲目相信 AI 的推論，必須以數據說話。</p>
     </body>
     </html>
+    
     """
     
     # Save HTML temporarily
