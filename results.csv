@@ -1,6 +1,6 @@
 ID,Claim,Evidence,Decision
-C1,ResNeXt-101 has a smaller average Accuracy Drop on ImageNet-R than MobileNet-V3.,"ResNeXt Drop: 0.6637, MobileNet Drop: 0.6560",Refuted
-C2,ResNeXt-101's Accuracy Drop is largest on 'cartoon' and 'sketch' sub-categories.,Max ResNeXt Drop on tattoo (0.7874). ,Refuted
-C3,Wrong Confidence is higher for MobileNet-V3 than ResNeXt-101.,"ResNeXt Wrong Conf: 0.2304, MobileNet Wrong Conf: 0.2276",Refuted
-C4,Both models have their highest Accuracy Drop on 'sculpture' renditions.,"ResNeXt Max: tattoo, MobileNet Max: toy",Refuted
-C5,The failure overlap between ResNeXt-101 and MobileNet-V3 is less than 50%.,Overlap Ratio: 84.38%,Refuted
+C1,ResNeXt-101 has a smaller average Accuracy Drop on ImageNet-R than MobileNet-V3.,"ResNeXt Drop: 0.5772, MobileNet Drop: 0.6109",Supported
+C2,ResNeXt-101's Accuracy Drop is largest on 'cartoon' and 'sketch' sub-categories.,Max ResNeXt Drop on plush object (0.7113). ,Refuted
+C3,Wrong Confidence is higher for MobileNet-V3 than ResNeXt-101.,"ResNeXt Wrong Conf: 0.2315, MobileNet Wrong Conf: 0.2396",Supported
+C4,Both models have their highest Accuracy Drop on 'sculpture' renditions.,"ResNeXt Max: plush object, MobileNet Max: tattoo",Refuted
+C5,The failure overlap between ResNeXt-101 and MobileNet-V3 is less than 50%.,Overlap Ratio: 82.33%,Refuted

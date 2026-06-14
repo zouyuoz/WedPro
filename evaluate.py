@@ -191,8 +191,8 @@ def main():
     ds_shifted_final_base = ds_shifted.filter(filter_shifted).map(process_shifted)
 
     # Samples per class
-    CLEAN_SAMPLES_PER_CLASS = 50 
-    SHIFTED_SAMPLES_PER_CLASS = 50
+    CLEAN_SAMPLES_PER_CLASS = 30 # maximum
+    SHIFTED_SAMPLES_PER_CLASS = 200 # all selected classes of ImageNet-R has 200+ samples
 
     NUM_CLEAN = len(selected_indices) * CLEAN_SAMPLES_PER_CLASS
     NUM_SHIFTED = len(selected_indices) * SHIFTED_SAMPLES_PER_CLASS
