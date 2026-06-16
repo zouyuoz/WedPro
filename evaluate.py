@@ -6,7 +6,6 @@ from torchvision import models, transforms
 from tqdm import tqdm
 from PIL import Image
 import io
-# ResNeXt101_32X8D_Weights, MobileNet_V3_Large_Weights
 from transformers import CLIPProcessor, CLIPModel
 
 # Setup device
@@ -99,30 +98,32 @@ def get_imagenet_mappings():
 
 def load_models():
     print("Loading ResNeXt-101 (IMAGENET1K_V2)...")
-    resnext = models.resnext101_32x8d(weights=models.ResNeXt101_32X8D_Weights.IMAGENET1K_V2).to(device)
+    resnext_weights = models.ResNeXt101_32X8D_Weights.IMAGENET1K_V2
+    resnext = models.resnext101_32x8d(weights=resnext_weights).to(device)
     resnext.eval()
 
     print("Loading MobileNet-V3 Large (IMAGENET1K_V2)...")
-    mobilenet = models.mobilenet_v3_large(weights=models.MobileNet_V3_Large_Weights.IMAGENET1K_V2).to(device)
+    mobilenet_weights = models.MobileNet_V3_Large_Weights.IMAGENET1K_V2
+    mobilenet = models.mobilenet_v3_large(weights=mobilenet_weights).to(device)
     mobilenet.eval()
 
     print("Loading ViT-B/16 (IMAGENET1K_V1)...")
-    vit_v1 = models.vit_b_16(weights=models.ViT_B_16_Weights.IMAGENET1K_V1).to(device)
+    vit_v1_weights = models.ViT_B_16_Weights.IMAGENET1K_V1
+    vit_v1 = models.vit_b_16(weights=vit_v1_weights).to(device)
     vit_v1.eval()
 
     print("Loading ViT-B/16 (IMAGENET1K_SWAG_E2E_V1)...")
-    vit_swag = models.vit_b_16(weights=models.ViT_B_16_Weights.IMAGENET1K_SWAG_E2E_V1).to(device)
+    vit_swag_weights = models.ViT_B_16_Weights.IMAGENET1K_SWAG_E2E_V1
+    vit_swag = models.vit_b_16(weights=vit_swag_weights).to(device)
     vit_swag.eval()
 
-    # Common transform for IMAGENET1K_V2 and others
-    preprocess = transforms.Compose([
-        transforms.Resize(232),
-        transforms.CenterCrop(224),
-        transforms.ToTensor(),
-        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-    ])
-
-    return resnext, mobilenet, vit_v1, vit_swag, preprocess
+    model_list = [
+        ("ResNeXt-101", resnext, resnext_weights.transforms()),
+        ("MobileNet-V3", mobilenet, mobilenet_weights.transforms()),
+        ("ViT-B16-V1", vit_v1, vit_v1_weights.transforms()),
+        ("ViT-B16-SWAG", vit_swag, vit_swag_weights.transforms())
+    ]
+    return model_list
 
 def main():
     # Load selected classes and renditions
@@ -147,7 +148,7 @@ def main():
     selected_indices = set([wnid_to_idx[wnid] for wnid in selected_wnids])
     idx_to_wnid = {idx: wnid for wnid, idx in wnid_to_idx.items()}
 
-    resnext101, mobilenet_v3, preprocess = load_models()
+    model_list = load_models()
     style_model, style_processor = load_style_model(hf_token=hf_token)
 
     # 1. Prepare Datasets
@@ -190,37 +191,29 @@ def main():
             'label': wnid_to_idx[item['wnid']],
             'wnid': item['wnid'],
             'style': style
-        resnext101, mobilenet_v3, vit_v1, vit_swag, preprocess = load_models()
-        style_model, style_processor = load_style_model(hf_token=hf_token)
+        }
 
-        # 1. Prepare Datasets
-        ...
-        # Samples per class
-        CLEAN_SAMPLES_PER_CLASS = 30 # maximum
-        SHIFTED_SAMPLES_PER_CLASS = 200 # all selected classes of ImageNet-R has 200+ samples
+    # Filter and process shifted
+    ds_shifted_final_base = ds_shifted.filter(filter_shifted).map(process_shifted)
 
-        NUM_CLEAN = len(selected_indices) * CLEAN_SAMPLES_PER_CLASS
-        NUM_SHIFTED = len(selected_indices) * SHIFTED_SAMPLES_PER_CLASS
+    # Samples per class
+    CLEAN_SAMPLES_PER_CLASS = 30 # maximum
+    SHIFTED_SAMPLES_PER_CLASS = 100
 
-        all_metrics = {}
+    NUM_CLEAN = len(selected_indices) * CLEAN_SAMPLES_PER_CLASS
+    NUM_SHIFTED = len(selected_indices) * SHIFTED_SAMPLES_PER_CLASS
 
-        model_list = [
-            ("ResNeXt-101", resnext101),
-            ("MobileNet-V3", mobilenet_v3),
-            ("ViT-B16-V1", vit_v1),
-            ("ViT-B16-SWAG", vit_swag)
-        ]
+    all_metrics = {}
 
-        for model_name, model in model_list:
-            print(f"\n--- Evaluating {model_name} ---")
+    for model_name, model, preprocess in model_list:
+        print(f"\n--- Evaluating {model_name} ---")
 
-            # We re-apply take() on the filtered/mapped stream for each model
-            model_ds_clean = ds_clean_final_base.take(NUM_CLEAN)
-            model_ds_shifted = ds_shifted_final_base.take(NUM_SHIFTED)
+        # We re-apply take() on the filtered/mapped stream for each model
+        model_ds_clean = ds_clean_final_base.take(NUM_CLEAN)
+        model_ds_shifted = ds_shifted_final_base.take(NUM_SHIFTED)
 
-            acc_clean, conf_clean, res_clean = evaluate_model(model, model_ds_clean, preprocess, NUM_CLEAN, f"{model_name} Clean", model_name, "clean")
-            acc_shift, conf_shift, res_shift = evaluate_model(model, model_ds_shifted, preprocess, NUM_SHIFTED, f"{model_name} Shifted", model_name, "shifted")
-
+        acc_clean, conf_clean, res_clean = evaluate_model(model, model_ds_clean, preprocess, NUM_CLEAN, f"{model_name} Clean", model_name, "clean")
+        acc_shift, conf_shift, res_shift = evaluate_model(model, model_ds_shifted, preprocess, NUM_SHIFTED, f"{model_name} Shifted", model_name, "shifted")
 
         all_metrics[model_name] = {
             'acc_clean': acc_clean,

@@ -122,13 +122,17 @@ def analyze_all():
         wc = [r['confidence'] for r in results_shift if not r['is_correct']]
         avg_wc = sum(wc) / len(wc) if wc else 0
         
-        style_stats = df.groupby('style')['is_correct'].agg(['sum', 'count'])
+        style_stats = df.groupby('style').agg({
+            'is_correct': ['sum', 'count'],
+            'confidence': 'mean'
+        })
+        style_stats.columns = ['sum', 'count', 'avg_conf']
         style_stats['accuracy'] = style_stats['sum'] / style_stats['count']
         style_stats['accuracy_drop'] = acc_clean - style_stats['accuracy']
         
         print(f"\n{'='*25} {model_name} Style Analysis {'='*25}")
-        print(f"  {'Style':<18} | {'Total':<6} | {'Error':<6} | {'Acc':<6} | {'Acc Drop':<10}")
-        print("-" * 65)
+        print(f"  {'Style':<18} | {'Total':<6} | {'Error':<6} | {'Acc':<6} | {'Drop':<7} | {'Conf':<6}")
+        print("-" * 75)
         
         sorted_metrics = sorted(style_stats.iterrows(), key=lambda x: x[1]['accuracy_drop'], reverse=True)
         max_drop_style = "unknown"
@@ -137,7 +141,7 @@ def analyze_all():
 
         for style, m in sorted_metrics:
             error_count = m['count'] - m['sum']
-            print(f"  {style:.<18} | {int(m['count']):<6} | {int(error_count):<6} | {m['accuracy']:6.2%} | {m['accuracy_drop']:.4f}")
+            print(f"  {style:.<18} | {int(m['count']):<6} | {int(error_count):<6} | {m['accuracy']:6.1%} | {m['accuracy_drop']:6.4f} | {m['avg_conf']:6.1%}")
             
             style_rows.append({
                 'Model': model_name,
@@ -145,7 +149,8 @@ def analyze_all():
                 'Error_Count': int(error_count),
                 'Total_Count': int(m['count']),
                 'Style_Accuracy': m['accuracy'],
-                'Accuracy_Drop': m['accuracy_drop']
+                'Accuracy_Drop': m['accuracy_drop'],
+                'Avg_Confidence': m['avg_conf']
             })
 
         summary_rows.append({
