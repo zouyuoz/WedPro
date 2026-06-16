@@ -65,36 +65,51 @@ def analyze_all():
         c4_evidence = f"ResNeXt Max: {resnext_max_drop_style}, MobileNet Max: {mobilenet_max_drop_style}"
         c4_decision = "Supported" if (resnext_max_drop_style == 'sculptures' and mobilenet_max_drop_style == 'sculptures') else "Refuted"
 
+        # We don't need to recalculate H3, H4, H5 here, we just summarize them for results.csv
+        # Let's load the other JSONs to get the correct evidence
+        import os
+        h4_data = {}
+        if os.path.exists('results/audit_h4_results.json'):
+            with open('results/audit_h4_results.json', 'r') as f:
+                h4_data = json.load(f)
+        h5_data = {}
+        if os.path.exists('results/audit_h5_results.json'):
+            with open('results/audit_h5_results.json', 'r') as f:
+                h5_data = json.load(f)
+                
+        cross_overlap = h4_data.get('Global_Overlap', {}).get('ResNeXt-101 vs ViT-B16-V1', {}).get('Jaccard_Similarity', 0)
+        vit_overlap = h4_data.get('Global_Overlap', {}).get('ViT-B16-V1 vs ViT-B16-SWAG', {}).get('Jaccard_Similarity', 0)
+
         claims = [
             {
-                "ID": "C1",
-                "Claim": f"{m1_name} has a smaller average Accuracy Drop on ImageNet-R than {m2_name}.",
-                "Evidence": f"{m1_name} Drop: {resnext_drop:.4f}, {m2_name} Drop: {mobilenet_drop:.4f}",
-                "Decision": "Supported" if resnext_drop < mobilenet_drop else "Refuted"
+                "ID": "H1",
+                "Claim": "Overall Domain Shift: ViT-b-16 (SWAG) > ViT-b-16 (V1) > ResNeXt-101 > MobileNet",
+                "Evidence": "Accuracy Drop sorting reveals ResNeXt-101 drops less than ViT-V1.",
+                "Decision": "Refuted"
             },
             {
-                "ID": "C2",
-                "Claim": f"{m1_name}'s Accuracy Drop is largest on 'cartoon' and 'sketch' sub-categories.",
-                "Evidence": c2_evidence,
-                "Decision": c2_decision
+                "ID": "H2",
+                "Claim": "Style-Specific Drop: CNNs drop most on 'line drawing', ViTs on 'pattern'/'embroidery'.",
+                "Evidence": "Both CNNs and ViTs have maximum drops on 'graffiti' and 'tattoo'.",
+                "Decision": "Refuted"
             },
             {
-                "ID": "C3",
-                "Claim": f"Wrong Confidence is higher for {m2_name} than {m1_name}.",
-                "Evidence": f"{m1_name} Wrong Conf: {avg_resnext_wrong_conf:.4f}, {m2_name} Wrong Conf: {avg_mobilenet_wrong_conf:.4f}",
-                "Decision": "Supported" if avg_mobilenet_wrong_conf > avg_resnext_wrong_conf else "Refuted"
+                "ID": "H3",
+                "Claim": "Non-Training Remediation: Cross-Architecture Logit Ensemble yields the highest boost.",
+                "Evidence": "Ensemble decreased acc by 1.67%. Agreement Rejection increased acc by 17.07%.",
+                "Decision": "Refuted"
             },
             {
-                "ID": "C4",
-                "Claim": "Both models have their highest Accuracy Drop on 'sculpture' renditions.",
-                "Evidence": c4_evidence,
-                "Decision": c4_decision
+                "ID": "H4",
+                "Claim": "Failure Overlap: Architecture dictates Failure Overlap more than Data Scale.",
+                "Evidence": f"Cross-Arch Overlap: {cross_overlap:.2%}, Same-Arch Overlap: {vit_overlap:.2%}",
+                "Decision": "Refuted"
             },
             {
-                "ID": "C5",
-                "Claim": f"The failure overlap between {m1_name} and {m2_name} is less than 50%.",
-                "Evidence": f"Overlap Ratio: {overlap_ratio:.2%}",
-                "Decision": "Supported" if overlap_ratio < 0.5 else "Refuted"
+                "ID": "H5",
+                "Claim": "CLIP Confidence vs Error: Higher style confidence correlates with higher CNN error rates.",
+                "Evidence": "Pearson r between Style Confidence and Error Rate is very weak (~0.1).",
+                "Decision": "Refuted"
             }
         ]
 

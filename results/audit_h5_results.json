@@ -1,0 +1,126 @@
+{
+    "ResNeXt-101": {
+        "Error_Rate_by_Bin": [
+            {
+                "style_conf_bin": "0.0-0.2",
+                "error_rate": 0.7558139534883721,
+                "count": 86
+            },
+            {
+                "style_conf_bin": "0.2-0.4",
+                "error_rate": 0.6923774954627949,
+                "count": 1102
+            },
+            {
+                "style_conf_bin": "0.4-0.6",
+                "error_rate": 0.6997929606625259,
+                "count": 966
+            },
+            {
+                "style_conf_bin": "0.6-0.8",
+                "error_rate": 0.6794871794871795,
+                "count": 702
+            },
+            {
+                "style_conf_bin": "0.8-1.0",
+                "error_rate": 0.8059440559440559,
+                "count": 1144
+            }
+        ],
+        "Pearson_r_StyleConf_vs_WrongConf": -0.003879682434818947,
+        "Pearson_r_StyleConf_vs_Error_Prob": 0.09390712163825572
+    },
+    "MobileNet-V3": {
+        "Error_Rate_by_Bin": [
+            {
+                "style_conf_bin": "0.0-0.2",
+                "error_rate": 0.7790697674418605,
+                "count": 86
+            },
+            {
+                "style_conf_bin": "0.2-0.4",
+                "error_rate": 0.7531760435571688,
+                "count": 1102
+            },
+            {
+                "style_conf_bin": "0.4-0.6",
+                "error_rate": 0.7701863354037267,
+                "count": 966
+            },
+            {
+                "style_conf_bin": "0.6-0.8",
+                "error_rate": 0.7435897435897436,
+                "count": 702
+            },
+            {
+                "style_conf_bin": "0.8-1.0",
+                "error_rate": 0.861013986013986,
+                "count": 1144
+            }
+        ],
+        "Pearson_r_StyleConf_vs_WrongConf": 0.018097883509078008,
+        "Pearson_r_StyleConf_vs_Error_Prob": 0.10690020319292898
+    },
+    "ViT-B16-V1": {
+        "Error_Rate_by_Bin": [
+            {
+                "style_conf_bin": "0.0-0.2",
+                "error_rate": 0.6976744186046512,
+                "count": 86
+            },
+            {
+                "style_conf_bin": "0.2-0.4",
+                "error_rate": 0.6787658802177858,
+                "count": 1102
+            },
+            {
+                "style_conf_bin": "0.4-0.6",
+                "error_rate": 0.6842650103519669,
+                "count": 966
+            },
+            {
+                "style_conf_bin": "0.6-0.8",
+                "error_rate": 0.6695156695156695,
+                "count": 702
+            },
+            {
+                "style_conf_bin": "0.8-1.0",
+                "error_rate": 0.8199300699300699,
+                "count": 1144
+            }
+        ],
+        "Pearson_r_StyleConf_vs_WrongConf": 0.05253482585389198,
+        "Pearson_r_StyleConf_vs_Error_Prob": 0.12442415220113692
+    },
+    "ViT-B16-SWAG": {
+        "Error_Rate_by_Bin": [
+            {
+                "style_conf_bin": "0.0-0.2",
+                "error_rate": 0.5465116279069768,
+                "count": 86
+            },
+            {
+                "style_conf_bin": "0.2-0.4",
+                "error_rate": 0.45553539019963707,
+                "count": 1102
+            },
+            {
+                "style_conf_bin": "0.4-0.6",
+                "error_rate": 0.46376811594202894,
+                "count": 966
+            },
+            {
+                "style_conf_bin": "0.6-0.8",
+                "error_rate": 0.48290598290598286,
+                "count": 702
+            },
+            {
+                "style_conf_bin": "0.8-1.0",
+                "error_rate": 0.56993006993007,
+                "count": 1144
+            }
+        ],
+        "Pearson_r_StyleConf_vs_WrongConf": -0.03134935518737463,
+        "Pearson_r_StyleConf_vs_Error_Prob": 0.08746187795823729
+    }
+}

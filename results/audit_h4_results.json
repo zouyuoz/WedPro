@@ -1,0 +1,516 @@
+{
+    "Global_Overlap": {
+        "ResNeXt-101 vs MobileNet-V3": {
+            "Jaccard_Similarity": 0.8314164648910412,
+            "Shared_Errors_Count": 2747,
+            "Wrong_Prediction_Match_Rate": 0.28795049144521295
+        },
+        "ResNeXt-101 vs ViT-B16-V1": {
+            "Jaccard_Similarity": 0.8360864040660737,
+            "Shared_Errors_Count": 2632,
+            "Wrong_Prediction_Match_Rate": 0.3263677811550152
+        },
+        "ResNeXt-101 vs ViT-B16-SWAG": {
+            "Jaccard_Similarity": 0.6179292093946411,
+            "Shared_Errors_Count": 1868,
+            "Wrong_Prediction_Match_Rate": 0.2874732334047109
+        },
+        "MobileNet-V3 vs ViT-B16-V1": {
+            "Jaccard_Similarity": 0.831306990881459,
+            "Shared_Errors_Count": 2735,
+            "Wrong_Prediction_Match_Rate": 0.3012797074954296
+        },
+        "MobileNet-V3 vs ViT-B16-SWAG": {
+            "Jaccard_Similarity": 0.590092879256966,
+            "Shared_Errors_Count": 1906,
+            "Wrong_Prediction_Match_Rate": 0.22455403987408185
+        },
+        "ViT-B16-V1 vs ViT-B16-SWAG": {
+            "Jaccard_Similarity": 0.6358439811701412,
+            "Shared_Errors_Count": 1891,
+            "Wrong_Prediction_Match_Rate": 0.31940772078265467
+        }
+    },
+    "Style_Specific_Overlap": {
+        "tattoo": {
+            "ResNeXt-101 vs MobileNet-V3": {
+                "Jaccard_Similarity": 0.9030023094688222,
+                "Shared_Errors_Count": 391,
+                "Wrong_Prediction_Match_Rate": 0.24552429667519182
+            },
+            "ResNeXt-101 vs ViT-B16-V1": {
+                "Jaccard_Similarity": 0.9080188679245284,
+                "Shared_Errors_Count": 385,
+                "Wrong_Prediction_Match_Rate": 0.2545454545454545
+            },
+            "ResNeXt-101 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.6320987654320988,
+                "Shared_Errors_Count": 256,
+                "Wrong_Prediction_Match_Rate": 0.1796875
+            },
+            "MobileNet-V3 vs ViT-B16-V1": {
+                "Jaccard_Similarity": 0.9241379310344827,
+                "Shared_Errors_Count": 402,
+                "Wrong_Prediction_Match_Rate": 0.26616915422885573
+            },
+            "MobileNet-V3 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.6135831381733021,
+                "Shared_Errors_Count": 262,
+                "Wrong_Prediction_Match_Rate": 0.19083969465648856
+            },
+            "ViT-B16-V1 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.6319612590799032,
+                "Shared_Errors_Count": 261,
+                "Wrong_Prediction_Match_Rate": 0.24521072796934865
+            }
+        },
+        "painting": {
+            "ResNeXt-101 vs MobileNet-V3": {
+                "Jaccard_Similarity": 0.7167487684729064,
+                "Shared_Errors_Count": 291,
+                "Wrong_Prediction_Match_Rate": 0.2508591065292096
+            },
+            "ResNeXt-101 vs ViT-B16-V1": {
+                "Jaccard_Similarity": 0.6639566395663956,
+                "Shared_Errors_Count": 245,
+                "Wrong_Prediction_Match_Rate": 0.3551020408163265
+            },
+            "ResNeXt-101 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.45244956772334294,
+                "Shared_Errors_Count": 157,
+                "Wrong_Prediction_Match_Rate": 0.3503184713375796
+            },
+            "MobileNet-V3 vs ViT-B16-V1": {
+                "Jaccard_Similarity": 0.6692307692307692,
+                "Shared_Errors_Count": 261,
+                "Wrong_Prediction_Match_Rate": 0.31417624521072796
+            },
+            "MobileNet-V3 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.4015544041450777,
+                "Shared_Errors_Count": 155,
+                "Wrong_Prediction_Match_Rate": 0.1870967741935484
+            },
+            "ViT-B16-V1 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.5016393442622951,
+                "Shared_Errors_Count": 153,
+                "Wrong_Prediction_Match_Rate": 0.3333333333333333
+            }
+        },
+        "embroidery": {
+            "ResNeXt-101 vs MobileNet-V3": {
+                "Jaccard_Similarity": 0.8619854721549637,
+                "Shared_Errors_Count": 356,
+                "Wrong_Prediction_Match_Rate": 0.33707865168539325
+            },
+            "ResNeXt-101 vs ViT-B16-V1": {
+                "Jaccard_Similarity": 0.885,
+                "Shared_Errors_Count": 354,
+                "Wrong_Prediction_Match_Rate": 0.3728813559322034
+            },
+            "ResNeXt-101 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.6632390745501285,
+                "Shared_Errors_Count": 258,
+                "Wrong_Prediction_Match_Rate": 0.34108527131782945
+            },
+            "MobileNet-V3 vs ViT-B16-V1": {
+                "Jaccard_Similarity": 0.8633093525179856,
+                "Shared_Errors_Count": 360,
+                "Wrong_Prediction_Match_Rate": 0.3
+            },
+            "MobileNet-V3 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.6421568627450981,
+                "Shared_Errors_Count": 262,
+                "Wrong_Prediction_Match_Rate": 0.26717557251908397
+            },
+            "ViT-B16-V1 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.6582278481012658,
+                "Shared_Errors_Count": 260,
+                "Wrong_Prediction_Match_Rate": 0.36538461538461536
+            }
+        },
+        "cartoon": {
+            "ResNeXt-101 vs MobileNet-V3": {
+                "Jaccard_Similarity": 0.8669201520912547,
+                "Shared_Errors_Count": 228,
+                "Wrong_Prediction_Match_Rate": 0.4342105263157895
+            },
+            "ResNeXt-101 vs ViT-B16-V1": {
+                "Jaccard_Similarity": 0.8554216867469879,
+                "Shared_Errors_Count": 213,
+                "Wrong_Prediction_Match_Rate": 0.4788732394366197
+            },
+            "ResNeXt-101 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.6208333333333333,
+                "Shared_Errors_Count": 149,
+                "Wrong_Prediction_Match_Rate": 0.436241610738255
+            },
+            "MobileNet-V3 vs ViT-B16-V1": {
+                "Jaccard_Similarity": 0.8522727272727273,
+                "Shared_Errors_Count": 225,
+                "Wrong_Prediction_Match_Rate": 0.4888888888888889
+            },
+            "MobileNet-V3 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.6,
+                "Shared_Errors_Count": 156,
+                "Wrong_Prediction_Match_Rate": 0.3717948717948718
+            },
+            "ViT-B16-V1 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.6192468619246861,
+                "Shared_Errors_Count": 148,
+                "Wrong_Prediction_Match_Rate": 0.44594594594594594
+            }
+        },
+        "plastic object": {
+            "ResNeXt-101 vs MobileNet-V3": {
+                "Jaccard_Similarity": 0.8342245989304813,
+                "Shared_Errors_Count": 156,
+                "Wrong_Prediction_Match_Rate": 0.3141025641025641
+            },
+            "ResNeXt-101 vs ViT-B16-V1": {
+                "Jaccard_Similarity": 0.8258426966292135,
+                "Shared_Errors_Count": 147,
+                "Wrong_Prediction_Match_Rate": 0.35374149659863946
+            },
+            "ResNeXt-101 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.6379310344827587,
+                "Shared_Errors_Count": 111,
+                "Wrong_Prediction_Match_Rate": 0.26126126126126126
+            },
+            "MobileNet-V3 vs ViT-B16-V1": {
+                "Jaccard_Similarity": 0.8152173913043478,
+                "Shared_Errors_Count": 150,
+                "Wrong_Prediction_Match_Rate": 0.3333333333333333
+            },
+            "MobileNet-V3 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.651685393258427,
+                "Shared_Errors_Count": 116,
+                "Wrong_Prediction_Match_Rate": 0.29310344827586204
+            },
+            "ViT-B16-V1 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.7037037037037037,
+                "Shared_Errors_Count": 114,
+                "Wrong_Prediction_Match_Rate": 0.3333333333333333
+            }
+        },
+        "line drawing": {
+            "ResNeXt-101 vs MobileNet-V3": {
+                "Jaccard_Similarity": 0.8271954674220963,
+                "Shared_Errors_Count": 292,
+                "Wrong_Prediction_Match_Rate": 0.23972602739726026
+            },
+            "ResNeXt-101 vs ViT-B16-V1": {
+                "Jaccard_Similarity": 0.8468468468468469,
+                "Shared_Errors_Count": 282,
+                "Wrong_Prediction_Match_Rate": 0.23049645390070922
+            },
+            "ResNeXt-101 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.5510835913312694,
+                "Shared_Errors_Count": 178,
+                "Wrong_Prediction_Match_Rate": 0.24157303370786518
+            },
+            "MobileNet-V3 vs ViT-B16-V1": {
+                "Jaccard_Similarity": 0.8166666666666667,
+                "Shared_Errors_Count": 294,
+                "Wrong_Prediction_Match_Rate": 0.20748299319727892
+            },
+            "MobileNet-V3 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.5254237288135594,
+                "Shared_Errors_Count": 186,
+                "Wrong_Prediction_Match_Rate": 0.1827956989247312
+            },
+            "ViT-B16-V1 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.5740740740740741,
+                "Shared_Errors_Count": 186,
+                "Wrong_Prediction_Match_Rate": 0.25268817204301075
+            }
+        },
+        "graffiti": {
+            "ResNeXt-101 vs MobileNet-V3": {
+                "Jaccard_Similarity": 0.8980263157894737,
+                "Shared_Errors_Count": 273,
+                "Wrong_Prediction_Match_Rate": 0.23076923076923078
+            },
+            "ResNeXt-101 vs ViT-B16-V1": {
+                "Jaccard_Similarity": 0.8986486486486487,
+                "Shared_Errors_Count": 266,
+                "Wrong_Prediction_Match_Rate": 0.2894736842105263
+            },
+            "ResNeXt-101 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.697594501718213,
+                "Shared_Errors_Count": 203,
+                "Wrong_Prediction_Match_Rate": 0.19704433497536947
+            },
+            "MobileNet-V3 vs ViT-B16-V1": {
+                "Jaccard_Similarity": 0.889261744966443,
+                "Shared_Errors_Count": 265,
+                "Wrong_Prediction_Match_Rate": 0.24528301886792453
+            },
+            "MobileNet-V3 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.689419795221843,
+                "Shared_Errors_Count": 202,
+                "Wrong_Prediction_Match_Rate": 0.13861386138613863
+            },
+            "ViT-B16-V1 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.7266187050359713,
+                "Shared_Errors_Count": 202,
+                "Wrong_Prediction_Match_Rate": 0.2376237623762376
+            }
+        },
+        "graphics": {
+            "ResNeXt-101 vs MobileNet-V3": {
+                "Jaccard_Similarity": 0.7401574803149606,
+                "Shared_Errors_Count": 94,
+                "Wrong_Prediction_Match_Rate": 0.3191489361702128
+            },
+            "ResNeXt-101 vs ViT-B16-V1": {
+                "Jaccard_Similarity": 0.8017241379310345,
+                "Shared_Errors_Count": 93,
+                "Wrong_Prediction_Match_Rate": 0.3763440860215054
+            },
+            "ResNeXt-101 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.5818181818181818,
+                "Shared_Errors_Count": 64,
+                "Wrong_Prediction_Match_Rate": 0.375
+            },
+            "MobileNet-V3 vs ViT-B16-V1": {
+                "Jaccard_Similarity": 0.7637795275590551,
+                "Shared_Errors_Count": 97,
+                "Wrong_Prediction_Match_Rate": 0.29896907216494845
+            },
+            "MobileNet-V3 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.575,
+                "Shared_Errors_Count": 69,
+                "Wrong_Prediction_Match_Rate": 0.2318840579710145
+            },
+            "ViT-B16-V1 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.6388888888888888,
+                "Shared_Errors_Count": 69,
+                "Wrong_Prediction_Match_Rate": 0.37681159420289856
+            }
+        },
+        "pattern": {
+            "ResNeXt-101 vs MobileNet-V3": {
+                "Jaccard_Similarity": 0.8865979381443299,
+                "Shared_Errors_Count": 86,
+                "Wrong_Prediction_Match_Rate": 0.18604651162790697
+            },
+            "ResNeXt-101 vs ViT-B16-V1": {
+                "Jaccard_Similarity": 0.8585858585858586,
+                "Shared_Errors_Count": 85,
+                "Wrong_Prediction_Match_Rate": 0.29411764705882354
+            },
+            "ResNeXt-101 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.631578947368421,
+                "Shared_Errors_Count": 60,
+                "Wrong_Prediction_Match_Rate": 0.16666666666666666
+            },
+            "MobileNet-V3 vs ViT-B16-V1": {
+                "Jaccard_Similarity": 0.8865979381443299,
+                "Shared_Errors_Count": 86,
+                "Wrong_Prediction_Match_Rate": 0.26744186046511625
+            },
+            "MobileNet-V3 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.6210526315789474,
+                "Shared_Errors_Count": 59,
+                "Wrong_Prediction_Match_Rate": 0.1694915254237288
+            },
+            "ViT-B16-V1 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.6666666666666666,
+                "Shared_Errors_Count": 62,
+                "Wrong_Prediction_Match_Rate": 0.25806451612903225
+            }
+        },
+        "plush object": {
+            "ResNeXt-101 vs MobileNet-V3": {
+                "Jaccard_Similarity": 0.8713692946058091,
+                "Shared_Errors_Count": 210,
+                "Wrong_Prediction_Match_Rate": 0.3047619047619048
+            },
+            "ResNeXt-101 vs ViT-B16-V1": {
+                "Jaccard_Similarity": 0.8717948717948718,
+                "Shared_Errors_Count": 204,
+                "Wrong_Prediction_Match_Rate": 0.3382352941176471
+            },
+            "ResNeXt-101 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.6493506493506493,
+                "Shared_Errors_Count": 150,
+                "Wrong_Prediction_Match_Rate": 0.2866666666666667
+            },
+            "MobileNet-V3 vs ViT-B16-V1": {
+                "Jaccard_Similarity": 0.8619246861924686,
+                "Shared_Errors_Count": 206,
+                "Wrong_Prediction_Match_Rate": 0.38349514563106796
+            },
+            "MobileNet-V3 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.6371308016877637,
+                "Shared_Errors_Count": 151,
+                "Wrong_Prediction_Match_Rate": 0.2185430463576159
+            },
+            "ViT-B16-V1 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.6816143497757847,
+                "Shared_Errors_Count": 152,
+                "Wrong_Prediction_Match_Rate": 0.34868421052631576
+            }
+        },
+        "art": {
+            "ResNeXt-101 vs MobileNet-V3": {
+                "Jaccard_Similarity": 0.9142857142857143,
+                "Shared_Errors_Count": 32,
+                "Wrong_Prediction_Match_Rate": 0.28125
+            },
+            "ResNeXt-101 vs ViT-B16-V1": {
+                "Jaccard_Similarity": 0.9411764705882353,
+                "Shared_Errors_Count": 32,
+                "Wrong_Prediction_Match_Rate": 0.4375
+            },
+            "ResNeXt-101 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.6944444444444444,
+                "Shared_Errors_Count": 25,
+                "Wrong_Prediction_Match_Rate": 0.52
+            },
+            "MobileNet-V3 vs ViT-B16-V1": {
+                "Jaccard_Similarity": 0.9117647058823529,
+                "Shared_Errors_Count": 31,
+                "Wrong_Prediction_Match_Rate": 0.45161290322580644
+            },
+            "MobileNet-V3 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.7142857142857143,
+                "Shared_Errors_Count": 25,
+                "Wrong_Prediction_Match_Rate": 0.24
+            },
+            "ViT-B16-V1 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.6857142857142857,
+                "Shared_Errors_Count": 24,
+                "Wrong_Prediction_Match_Rate": 0.4166666666666667
+            }
+        },
+        "toy": {
+            "ResNeXt-101 vs MobileNet-V3": {
+                "Jaccard_Similarity": 0.8085106382978723,
+                "Shared_Errors_Count": 38,
+                "Wrong_Prediction_Match_Rate": 0.34210526315789475
+            },
+            "ResNeXt-101 vs ViT-B16-V1": {
+                "Jaccard_Similarity": 0.782608695652174,
+                "Shared_Errors_Count": 36,
+                "Wrong_Prediction_Match_Rate": 0.3333333333333333
+            },
+            "ResNeXt-101 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.6341463414634146,
+                "Shared_Errors_Count": 26,
+                "Wrong_Prediction_Match_Rate": 0.34615384615384615
+            },
+            "MobileNet-V3 vs ViT-B16-V1": {
+                "Jaccard_Similarity": 0.851063829787234,
+                "Shared_Errors_Count": 40,
+                "Wrong_Prediction_Match_Rate": 0.35
+            },
+            "MobileNet-V3 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.5652173913043478,
+                "Shared_Errors_Count": 26,
+                "Wrong_Prediction_Match_Rate": 0.3076923076923077
+            },
+            "ViT-B16-V1 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.6046511627906976,
+                "Shared_Errors_Count": 26,
+                "Wrong_Prediction_Match_Rate": 0.2692307692307692
+            }
+        },
+        "sculpture": {
+            "ResNeXt-101 vs MobileNet-V3": {
+                "Jaccard_Similarity": 0.7300380228136882,
+                "Shared_Errors_Count": 192,
+                "Wrong_Prediction_Match_Rate": 0.265625
+            },
+            "ResNeXt-101 vs ViT-B16-V1": {
+                "Jaccard_Similarity": 0.7759336099585062,
+                "Shared_Errors_Count": 187,
+                "Wrong_Prediction_Match_Rate": 0.29411764705882354
+            },
+            "ResNeXt-101 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.641860465116279,
+                "Shared_Errors_Count": 138,
+                "Wrong_Prediction_Match_Rate": 0.2898550724637681
+            },
+            "MobileNet-V3 vs ViT-B16-V1": {
+                "Jaccard_Similarity": 0.8068181818181818,
+                "Shared_Errors_Count": 213,
+                "Wrong_Prediction_Match_Rate": 0.23943661971830985
+            },
+            "MobileNet-V3 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.5581395348837209,
+                "Shared_Errors_Count": 144,
+                "Wrong_Prediction_Match_Rate": 0.18055555555555555
+            },
+            "ViT-B16-V1 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.5957446808510638,
+                "Shared_Errors_Count": 140,
+                "Wrong_Prediction_Match_Rate": 0.34285714285714286
+            }
+        },
+        "origami": {
+            "ResNeXt-101 vs MobileNet-V3": {
+                "Jaccard_Similarity": 0.8217821782178217,
+                "Shared_Errors_Count": 83,
+                "Wrong_Prediction_Match_Rate": 0.3373493975903614
+            },
+            "ResNeXt-101 vs ViT-B16-V1": {
+                "Jaccard_Similarity": 0.8041237113402062,
+                "Shared_Errors_Count": 78,
+                "Wrong_Prediction_Match_Rate": 0.34615384615384615
+            },
+            "ResNeXt-101 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.7473684210526316,
+                "Shared_Errors_Count": 71,
+                "Wrong_Prediction_Match_Rate": 0.29577464788732394
+            },
+            "MobileNet-V3 vs ViT-B16-V1": {
+                "Jaccard_Similarity": 0.7524752475247525,
+                "Shared_Errors_Count": 76,
+                "Wrong_Prediction_Match_Rate": 0.27631578947368424
+            },
+            "MobileNet-V3 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.696969696969697,
+                "Shared_Errors_Count": 69,
+                "Wrong_Prediction_Match_Rate": 0.2318840579710145
+            },
+            "ViT-B16-V1 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.8275862068965517,
+                "Shared_Errors_Count": 72,
+                "Wrong_Prediction_Match_Rate": 0.3333333333333333
+            }
+        },
+        "video game": {
+            "ResNeXt-101 vs MobileNet-V3": {
+                "Jaccard_Similarity": 0.7352941176470589,
+                "Shared_Errors_Count": 25,
+                "Wrong_Prediction_Match_Rate": 0.4
+            },
+            "ResNeXt-101 vs ViT-B16-V1": {
+                "Jaccard_Similarity": 0.78125,
+                "Shared_Errors_Count": 25,
+                "Wrong_Prediction_Match_Rate": 0.36
+            },
+            "ResNeXt-101 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.7096774193548387,
+                "Shared_Errors_Count": 22,
+                "Wrong_Prediction_Match_Rate": 0.5
+            },
+            "MobileNet-V3 vs ViT-B16-V1": {
+                "Jaccard_Similarity": 0.8787878787878788,
+                "Shared_Errors_Count": 29,
+                "Wrong_Prediction_Match_Rate": 0.3448275862068966
+            },
+            "MobileNet-V3 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.7058823529411765,
+                "Shared_Errors_Count": 24,
+                "Wrong_Prediction_Match_Rate": 0.4166666666666667
+            },
+            "ViT-B16-V1 vs ViT-B16-SWAG": {
+                "Jaccard_Similarity": 0.6470588235294118,
+                "Shared_Errors_Count": 22,
+                "Wrong_Prediction_Match_Rate": 0.5
+            }
+        }
+    }
+}

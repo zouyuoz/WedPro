@@ -1,0 +1,6 @@
+Strategy,Coverage,Accuracy,Gain_vs_Best_Baseline
+Baseline (ResNeXt-101),1.0,0.27425,-0.22875
+Baseline (ViT-B16-SWAG),1.0,0.503,0.0
+Ensemble (Confidence-Weighted),1.0,0.4455,-0.057499999999999996
+Agreement Rejection,0.3785,0.6453104359313078,0.14231043593130777
+Confidence Rejection (80%),0.8,0.590625,0.08762499999999995
