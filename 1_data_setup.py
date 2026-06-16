@@ -19,12 +19,12 @@ def setup_data():
     
     # 2. Read WNIDs from wala.csv in order
     print("Reading class order from wala.csv...")
-    if not os.path.exists('wala.csv'):
+    if not os.path.exists('metadata/wala.csv'):
         print("Error: wala.csv not found.")
         return
     
     ordered_wnids = []
-    with open('wala.csv', 'r') as f:
+    with open('metadata/wala.csv', 'r') as f:
         lines = f.readlines()[1:] # Skip header
         for line in lines:
             wnid = line.split(',')[0].strip()

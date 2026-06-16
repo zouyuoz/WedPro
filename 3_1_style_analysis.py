@@ -67,7 +67,6 @@ def analyze_all():
 
         # We don't need to recalculate H3, H4, H5 here, we just summarize them for results.csv
         # Let's load the other JSONs to get the correct evidence
-        import os
         h4_data = {}
         if os.path.exists('results/audit_h4_results.json'):
             with open('results/audit_h4_results.json', 'r') as f:

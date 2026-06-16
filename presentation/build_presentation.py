@@ -238,7 +238,7 @@ def generate_presentation():
     </html>
     """
     
-    with open('presentation/index.html', 'w', encoding='utf-8') as f:
+    with open('index.html', 'w', encoding='utf-8') as f:
         f.write(html_template)
     
     print("Presentation generated successfully at presentation/index.html")
