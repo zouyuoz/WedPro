@@ -1,7 +1,7 @@
 .venv/
 __pycache__/
 *.pyc
-results/metrics.json
+# results/metrics.json
 # metadata/
 .DS_Store
 *.env

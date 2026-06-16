@@ -5,7 +5,7 @@
 ## 核心任務
 - **資料集**: 使用 `ImageNet-V2` 作為基準（Clean），`ImageNet-R` 作為偏移資料（Shifted）。
 - **模型比較**: `ResNeXt-101` (Heavy) vs. `MobileNet-V3` (Lightweight)。
-- **預訓練權重**: 使用官方 `IMAGENET1K_V2` 版本。
+- **預訓練權重**: 兩者皆使用官方 `IMAGENET1K_V2` 版本。
 - **主要指標**: Accuracy Drop, Wrong Confidence, Failure Overlap。
 - **AI 審核**: 驗證 5 個關於模型穩健性的 AI 假說。
 
@@ -63,7 +63,7 @@ pip install -r requirements.txt
     ```
 3.  **產出分析報告**:
     ```bash
-    python analyze.py
+    python style_analysis.py
     ```
 
 ## 實驗結果摘要

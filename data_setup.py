@@ -1,17 +1,20 @@
 import os
 import random
 import json
-import requests
 from datasets import load_dataset
 
 def setup_data():
     # Set seed for reproducibility
     random.seed(42)
     
-    # 1. Fetch ImageNet-1K WNIDs to ensure compatibility
-    url = "https://s3.amazonaws.com/deep-learning-models/image-models/imagenet_class_index.json"
-    print("Fetching ImageNet-1K class mappings...")
-    class_index = requests.get(url).json()
+    # 1. Load ImageNet-1K WNIDs from local metadata
+    print("Loading ImageNet-1K class mappings from local metadata...")
+    if not os.path.exists('metadata/imagenet_class_index.json'):
+        print("Error: metadata/imagenet_class_index.json not found.")
+        return
+        
+    with open('metadata/imagenet_class_index.json', 'r') as f:
+        class_index = json.load(f)
     wnids_1k = set(v[0] for v in class_index.values())
     
     # 2. Read WNIDs from wala.csv in order
