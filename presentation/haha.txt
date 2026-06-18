@@ -1,0 +1,19 @@
+將以下回答，個別濃縮到 ~150字
+
+1. 預測排名：ViT-b-16 (SWAG) > ViT-b-16 (V1) $\ge$ ResNeXt-101 > MobileNet原因分析：ViT-b-16 (SWAG) 表現最優：該模型核心優勢在於其採用的 IMAGENET1K_SWAG_E2E_V1 權重。SWAG 策略在含有數十億張影像的弱監督資料集（IG-3B）上進行了預訓練。海量且多樣化的數據讓模型建立起極其強韌的基底，實質上打破了常規 ImageNet-1K 訓練帶來的特徵侷限，對各種未知的 Domain Shift（包含風格扭曲）具備極強的 Generalization 能力。Architecture Bias（架構偏誤）的釋放：標準的 ViT-b-16 (V1) 雖然只在 ImageNet-1K 上訓練，但因為 ViT 架構本質上依賴 Self-Attention 來捕捉全域語義，不像 CNN 受到局部局部卷積核的限制，因此 ViT 天生具備更高的 Shape Bias。在應對 ImageNet-R 這種結構完整、僅表面紋理改變的資料集時，ViT 的架構優勢使其抗跌幅能力通常優於或至少持平於重型 CNN（ResNeXt-101）。MobileNet 依舊墊底：受限於模型容量（Capacity）過小，為了效率犧牲了提取不變性特徵的能力，極度依賴局部像素紋理，因此最容易崩潰。
+2. 這裡必須將模型分為 CNN 陣營 與 ViT 陣營 來進行分析，因為兩者的特徵提取機制截然不同。
+CNN 陣營 (ResNeXt-101, MobileNet)："line drawing"（線條畫）的跌幅最大。
+原因：CNN 的淺層網絡高度依賴邊緣、顏色與局部紋理的組合。線條畫將影像內部所有的色彩、幾何陰影全部濾除，僅剩下極度抽象且稀疏的線條。這會導致 CNN 的特徵活化地圖（Activation Map）出現嚴重的稀疏化，使其無法提取出有效的特徵進行分類。
+ViT 陣營 (ViT-b-16 V1, ViT-b-16 SWAG)："pattern"（重複圖案）或 "embroidery"（刺繡）的跌幅最大。
+原因：ViT 的第一步是將影像切分成固定大小的 Patch（例如 16x16 像素）並轉換為 Token。當面對 "pattern" 或 "embroidery" 時，全圖佈滿了強烈且高頻的重複幾何紋理或針線噪聲。在單個 Patch 內部，原本連續的物體邊緣被這些密集噪聲切斷，導致 Patch Embedding 階段就引入了錯誤的特徵編碼，進而影響後續 Self-Attention 的全域關聯計算。
+3. 推薦策略：Cross-Architecture Logit Ensemble（跨架構 Logit 融合） + Test-Time Resolution Scaling（測試期解析度縮放）
+具體操作與提升原因：
+跨架構的 Model Ensemble：你現在擁有傳統 CNN（ResNeXt）與新式 ViT 兩種完全不同 Inductive Bias（歸納偏誤）的架構。CNN 關注局部紋理與連續變換，ViT 關注全域結構與 Patch 關聯。將 ResNeXt-101 與 ViT-b-16 (SWAG) 的輸出 Logits 進行加權平均，可以實現特徵互補，最大程度抹平單一架構在特定風格上的盲點。
+針對 ViT 的 Resolution Scaling：ViT 對輸入尺寸非常敏感。在進行測試時，稍微提升輸入解析度（例如從 224x224 提升到 384x384），並對 Position Embedding 進行雙線性插值。這能讓 ViT 在面對 embroidery 或 pattern 等高頻風格噪聲時，在 Patch 內部保留更多原本物體的相對結構，被證實能顯著提升 ViT 在 OOD（Out-of-Distribution）資料上的精準度。
+4. 假設性回答：網路架構（Architecture）對 Failure Overlap 的決定性，顯著高於預訓練數據量。
+推測原因：
+預期實驗結果會顯示 ViT-b-16 (V1) 與 ViT-b-16 (SWAG) 即使準確率差異巨大，但只要兩者同時出錯時，其預測出的錯誤標籤（Wrong Predictions）重合度會極高。這是因為它們共享了 Tokenization 與 Global Attention 的底層數學邏輯，對於風格影像的「誤判視角」是一致的。相反地，ResNeXt-101 與 ViT-b-16 (V1) 即使在某些風格上的絕對準確率接近，它們發生錯誤的資料點與錯誤類別也會高度發散，因為 CNN 與 ViT 的失敗機制（Failure Mechanism）本質上相互獨立。
+5. 假設性回答：標準訓練的 ViT-b-16 (V1) 展現出的 Wrong Confidence 情況會最嚴重；而 ViT-b-16 (SWAG) 的信心度分佈會明顯得到 Calibration（校準）。
+推測原因：
+標準的 ViT 在有限的 ImageNet-1K 數據上訓練時，容易對某些特定的 Patch 組合產生過擬合（Overfitting）或異常的高激活（Overactivation）。當 Domain Shift 帶來的風格圖案剛好觸發了這些高激活特徵時，標準 ViT 會毫無根據地給出極高的置信度。而 ViT-b-16 (SWAG) 在預訓練階段看過了數十億張、包含各種雜訊與奇特上下文的影像，其決策邊界（Decision Boundary）被高度平滑化，因此在面對未知的風格偏移時，即使猜錯，其輸出機率也會相對平均（Entropy 較高），表現出更理性的「不知道就說不知道」，顯著降低 Wrong Confidence。
+

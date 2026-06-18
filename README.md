@@ -37,7 +37,7 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 ```
-*(註：若無 `requirements.txt`，請安裝 `torch`, `torchvision`, `datasets`, `pandas`, `tqdm`, `requests`, `matplotlib`, `transformers`)*
+*(註：若無 `requirements.txt`，請安裝 `torch`, `torchvision`, `datasets`, `pandas`, `tqdm`, `requests`, `matplotlib`, `transformers`, `weasyprint`)*
 
 ### 2. 資料集存取權限 (Hugging Face Token)
 本專案使用 Hugging Face 串流讀取資料集。為確保能順利存取受限資料集（如 ImageNet-1K 相關變體）並避免 API 限制，請執行以下步驟：
@@ -49,40 +49,56 @@ pip install -r requirements.txt
    ```
 *(註：`HF_TOKEN.env` 已加入 `.gitignore`，不會被上傳至 GitHub)*
 
-### 3. 執行流程
-專案分為三個階段執行：
+### 3. 執行流程與產出
+專案分為多個階段執行，請依序執行以下腳本：
 
-1.  **資料初始化**:
-    ```bash
-    python data_setup.py
-    ```
-2.  **執行模型評估**:
-    （此步驟會透過 Hugging Face Streaming 模式讀取資料，不需下載完整 ImageNet 資料集）
-    ```bash
-    python evaluate.py
-    ```
-3.  **產出分析報告**:
-    ```bash
-    python style_analysis.py
-    ```
+#### Step 1: 資料初始化
+```bash
+python data_setup.py
+```
+*   **產出**: `metadata/selected_classes.json` (從 `wala.csv` 映射並確認可用的 ImageNet 類別子集)。
 
-## 實驗結果摘要
+#### Step 2: 基礎模型推論與風格標註
+```bash
+python evaluate_origin.py
+```
+*   **功能**: 執行基礎模型的推論。同時使用 CLIP 模型對每張圖片進行 Zero-shot 風格辨識與信心度計算。
+*   **產出**: 
+    *   `results/metrics.json` (包含所有基礎模型的預測結果與 CLIP 風格標註)。
+    *   `failure_cases/` (自動儲存每個模型前幾次預測失敗的影像)。
 
-| 模型 | Clean Acc | Shifted Acc | Accuracy Drop |
-| :--- | :--- | :--- | :--- |
-| **VGG-19** | 75.50% | 17.00% | 0.5850 |
-| **ViT-B/16** | 84.00% | 28.50% | 0.5550 |
+#### Step 3: 免訓練補救措施 (TTA) 評估
+```bash
+python evaluate.py
+```
+*   **功能**: 針對特定的模型執行 Test-Time Augmentation (TTA) 多視角推論。
+*   **產出**: 更新 `results/metrics.json`，將 TTA 變體的實驗數據附加至現有檔案中。
 
-### 主要發現 (Audit Decisions)
-- **C1 (Supported)**: ViT 在風格偏移下的準確度下降（Accuracy Drop）確實比 VGG-19 小。
-- **C3 (Refuted)**: 修正了 AI 的預測，實驗發現 ViT 在答錯時反而擁有更高的平均信心值，存在更嚴重的過度自信問題。
-- **C5 (Refuted)**: 儘管架構不同，VGG 與 ViT 的失敗案例重疊率高達 **80.17%**。
+#### Step 4: 假說驗證與錯誤分析 (Audit Scripts)
+依序執行以下分析腳本來驗證不同的 AI 假說：
+```bash
+python audit_h3.py
+python audit_h4.py
+python audit_h5.py
+python misclassification_analysis.py
+python style_analysis.py
+```
+*   **產出**:
+    *   `results/audit_h3_results.csv`: Logit Ensemble 與 Confidence Rejection 的效益分析 (H3)。
+    *   `results/audit_h4_results.json`: 失敗案例的 Jaccard 重疊率 (H4)。
+    *   `results/audit_h5_results.json`: CLIP 風格信心度與模型錯誤率的相關性 (H5)。
+    *   `results/misclassify_analysis_result.json`: 各模型在不同風格下最常誤判的類別統計。
+    *   `results/style_error_analysis.csv`: 各風格的準確度下降報表。
+    *   `results.csv`: 最終的 5 項 AI 假說審核總表 (Supported/Refuted)。
 
-## 提交 GitHub 說明
-1. 初始化 Git 倉庫: `git init`
-2. 新增所有檔案: `git add .`
-3. 提交變更: `git commit -m "Complete MILS AI-Claim Audit Assignment"`
-4. 推送至遠端: `git push origin main`
+#### Step 5: 產生視覺化報告
+```bash
+python generate_report.py
+python build_presentation.py
+```
+*   **產出**: 
+    *   `report.pdf` (完整的綜合數據分析報告)。
+    *   `presentation/index.html` (用於口頭報告的互動式投影片)。
 
 ---
 *本專案為 NYCU MILS 課程作業實作。*

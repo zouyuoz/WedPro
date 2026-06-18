@@ -154,6 +154,16 @@ def load_models():
     resnext = models.resnext101_32x8d(weights=resnext_weights).to(device)
     resnext.eval()
 
+    print("Loading MobileNet-V3-Large (IMAGENET1K_V2) for TTA...")
+    mobilenet_weights = models.MobileNet_V3_Large_Weights.IMAGENET1K_V2
+    mobilenet = models.mobilenet_v3_large(weights=mobilenet_weights).to(device)
+    mobilenet.eval()
+
+    print("Loading ViT-B/16 (IMAGENET1K_V1) for TTA...")
+    vit_v1_weights = models.ViT_B_16_Weights.IMAGENET1K_V1
+    vit_v1 = models.vit_b_16(weights=vit_v1_weights).to(device)
+    vit_v1.eval()
+
     print("Loading ViT-B/16 (IMAGENET1K_SWAG_E2E_V1) for TTA...")
     vit_swag_weights = models.ViT_B_16_Weights.IMAGENET1K_SWAG_E2E_V1
     vit_swag = models.vit_b_16(weights=vit_swag_weights).to(device)
@@ -161,6 +171,8 @@ def load_models():
 
     model_list = [
         ("ResNeXt-101", resnext, resnext_weights.transforms(), 0.7931),
+        ("MobileNet-V3", mobilenet, mobilenet_weights.transforms(), 0.7404),
+        ("ViT-B16-V1", vit_v1, vit_v1_weights.transforms(), 0.8107),
         ("ViT-B16-SWAG", vit_swag, vit_swag_weights.transforms(), 0.8530)
     ]
     return model_list
